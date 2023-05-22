@@ -3,6 +3,7 @@ package com.example.gestion_sispac
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,14 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.gestion_sispac.ui.model.LoginModel
 import com.example.gestion_sispac.ui.theme.GestionSISPACTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val loginModel : LoginModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -43,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    LoginScreen(loginModel)
                 }
             }
         }
@@ -53,8 +58,8 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun LoginScreen() {
+//@Preview
+fun LoginScreen(loginModel: LoginModel) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -68,25 +73,24 @@ fun LoginScreen() {
         )
         Spacer(modifier = Modifier.height(40.dp))
 
-        var username by remember { mutableStateOf(TextFieldValue("")) }
-        var password by remember { mutableStateOf(TextFieldValue("")) }
+        val context = LocalContext.current
 
-        TextField(value = username,
-            onValueChange = {username = it},
+        TextField(value = loginModel.name,
+            onValueChange = {loginModel.name = it},
             label = {Text("usuario")}
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextField(value = password,
+        TextField(value = loginModel.password,
             visualTransformation =  PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = {password = it},
+            onValueChange = {loginModel.password = it},
             label = { Text("contraseña")}
         )
         Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { },
+                onClick = {val loginResponse = loginModel.onSubmit(context)},
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()

@@ -11,7 +11,10 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
+
+
 class RepositoryUser : CoroutineScope by MainScope() {
+
     val apiUser : ApiUser = ApiAdapter.getInstance().create(ApiUser::class.java)
 
     fun fetchData(context : Context, name: String, password: String): LoginResponse {

@@ -1,6 +1,6 @@
-package com.example.gestion_sispac.ui.remote
+package com.example.gestion_sispac.ui.theme.remote
 
-import com.example.gestion_sispac.ui.response.LoginResponse
+import com.example.gestion_sispac.ui.theme.response.LoginResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST

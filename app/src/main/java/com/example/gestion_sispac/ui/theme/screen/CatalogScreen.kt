@@ -1,37 +1,29 @@
-package com.example.pruebasgui.ui.theme.screen
+package com.example.gestion_sispac.ui.theme.screen
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.materialIcon
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.Modifier
 
@@ -39,9 +31,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Icon
-import com.example.pruebasgui.R
+import com.example.gestion_sispac.R
 
-import com.example.pruebasgui.ui.theme.LightBluePer
+import com.example.gestion_sispac.LightBluePer
 
 import androidx.compose.ui.text.style.TextAlign
 import com.example.gestion_sispac.ui.theme.model.Book
@@ -111,6 +103,23 @@ fun ShowBooks(list : List<Book>) {
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun SearchBar() {
+    var search by remember { mutableStateOf(value = "") }
+    OutlinedTextField(value = search,
+        onValueChange = {search = it},
+        trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_search),
+            contentDescription = null)},
+        label = {Text(text = "Buscar",
+        style = MaterialTheme.typography.bodyLarge)},
+        placeholder = { Text(text = "Barra de búsqueda")},
+        modifier = Modifier.
+        fillMaxWidth()
+    )
+
+}
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -118,10 +127,16 @@ fun ShowBooks(list : List<Book>) {
 @Composable
 @Preview
 fun CatalogScreen() {
-   ShowBooks(list = books)
-
+    Column {
+        SearchBar()
+        FilterBooks()
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(24.dp))
+        ShowBooks(list = books)
+    }
 }
-
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
@@ -129,12 +144,27 @@ fun OptionsBar() {
     TopAppBar(title = {Text(text = "Opciones",
         style = MaterialTheme.typography.bodyLarge) })
 }
+ */
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterRadio(valor : String) {
+    var option by remember {mutableStateOf(value = false)}
+    Column (horizontalAlignment = Alignment.CenterHorizontally){
+        RadioButton(selected = option, onClick = { option = !option
+        /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        Text(text = valor, style = MaterialTheme.typography.labelSmall)
+    }
+}
+
 @Composable
 @Preview
-fun SearchBar() {
-    var search by remember { mutableStateOf(value = "") }
-    TextField(value = search, onValueChange = {search = it})
-
+fun FilterBooks(){
+    Row (
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
+            ){
+        FilterRadio(valor = "Autor")
+        FilterRadio(valor = "Categoría")
+        FilterRadio(valor = "Editorial")
+    }
 }

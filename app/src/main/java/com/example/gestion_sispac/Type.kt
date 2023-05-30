@@ -1,4 +1,4 @@
-package com.example.pruebasgui.ui.theme
+package com.example.gestion_sispac
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.pruebasgui.R
+import com.example.gestion_sispac.R
 
 
 val QuickSand = FontFamily(

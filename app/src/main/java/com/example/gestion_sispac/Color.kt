@@ -1,4 +1,4 @@
-package com.example.pruebasgui.ui.theme
+package com.example.gestion_sispac
 
 import androidx.compose.ui.graphics.Color
 /*

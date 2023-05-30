@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.pruebasgui'
+    namespace 'com.example.gestion_sispac'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.pruebasgui"
+        applicationId "com.example.gestion_sispac"
         minSdk 25
         targetSdk 33
         versionCode 1

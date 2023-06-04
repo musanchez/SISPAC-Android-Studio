@@ -59,7 +59,6 @@ fun ItemBook(book: Book) {
             .fillMaxWidth()
             .padding(4.dp)
             .background(color = LightBluePer, shape = RoundedCornerShape(6.dp))
-
             ){
         Column {
             Text("Titulo: " + book.title,
@@ -129,7 +128,7 @@ fun SearchBar() {
 fun CatalogScreen() {
     Column {
         SearchBar()
-        FilterBooks()
+        FilterRadio()
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(24.dp))
@@ -147,24 +146,27 @@ fun OptionsBar() {
  */
 
 @Composable
-fun FilterRadio(valor : String) {
-    var option by remember {mutableStateOf(value = false)}
-    Column (horizontalAlignment = Alignment.CenterHorizontally){
-        RadioButton(selected = option, onClick = { option = !option
-        /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
-        Text(text = valor, style = MaterialTheme.typography.labelSmall)
-    }
-}
-
-@Composable
-@Preview
-fun FilterBooks(){
+fun FilterRadio() {
+    var option by remember {mutableStateOf("")}
     Row (
         horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
             ){
-        FilterRadio(valor = "Autor")
-        FilterRadio(valor = "Categoría")
-        FilterRadio(valor = "Editorial")
+        RadioButton(selected = option == "Autor", onClick = { option = "Autor"
+        /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        Text(text = "Autor", style = MaterialTheme.typography.labelSmall)
+
+        RadioButton(selected = option == "Editorial", onClick = { option = "Editorial"
+            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        Text(text = "Editorial", style = MaterialTheme.typography.labelSmall)
+
+        RadioButton(selected = option == "Categoría", onClick = { option = "Categoría"
+            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        Text(text = "Categoría", style = MaterialTheme.typography.labelSmall)
+
+        RadioButton(selected = option == "Titulo", onClick = { option = "Titulo"
+            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        Text(text = "Titulo", style = MaterialTheme.typography.labelSmall)
     }
 }

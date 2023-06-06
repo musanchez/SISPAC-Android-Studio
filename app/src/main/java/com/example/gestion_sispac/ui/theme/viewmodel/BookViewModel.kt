@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class BookModel : ViewModel() {
+class BookViewModel : ViewModel() {
     data class UIState(
         val _loading: Boolean = false,
-        val listLibro: List<GenBookItem?> = emptyList<GenBookItem>()
+        val listLibro: List<GenBookItem> = emptyList<GenBookItem>()
     )
 
     val bookRepo : RepositoryBook = RepositoryBook()
@@ -33,10 +33,11 @@ class BookModel : ViewModel() {
     suspend fun addOneByTitle(title: String) {
         viewModelScope.launch {
             _bookState.update {it.copy(_loading = true)}
-            val response :  ArrayList<GenBookItem?> = ArrayList<GenBookItem?>()
-            response.add(bookRepo.getByTitle(title))
-            val test : List<GenBookItem?> = response
-            _bookState.update { it.copy(listLibro = test) }
+            //val response :  ArrayList<GenBookItem?> = ArrayList<GenBookItem?>()
+            //response.add(bookRepo.getByTitle(title))
+            val response = bookRepo.getAll()
+            //val test : List<GenBookItem> = response
+            _bookState.update { it.copy(listLibro = response) }
             _bookState.update {it.copy(_loading = false)}
         }
     }

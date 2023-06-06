@@ -5,5 +5,6 @@ data class Book(
     val title : String,
     val publisher : String,
     val classification: String,
-    val status: Boolean
+    val authors : List<String>
+    //val status: Boolean
 )

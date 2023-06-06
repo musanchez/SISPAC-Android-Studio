@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,11 +37,15 @@ import com.example.gestion_sispac.R
 import com.example.gestion_sispac.LightBluePer
 
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.gestion_sispac.ui.theme.model.Author
 import com.example.gestion_sispac.ui.theme.model.Book
+import com.example.gestion_sispac.ui.theme.model.GenBookItem
+import com.example.gestion_sispac.ui.theme.viewmodel.BookViewModel
 
 
-
-val book1 = Book(title = "El principito", isbn = "1",
+/*val book1 = Book(title = "El principito", isbn = "1",
     classification = "Fantasía", publisher = "Springer", status = true)
 val book2 = Book(title = "Las mil y una noches", isbn = "1",
     classification = "Ciencia Ficción", publisher = "Hispana", status = true)
@@ -49,11 +54,20 @@ val book3 = Book(title = "El coronel no tiene quien le escriba", isbn = "1",
 val book4 = Book(title = "Margarita", isbn = "1",
     classification = "Novela", publisher = "Big House", status = true)
 
-val books : List<Book> = listOf(book1, book2, book3, book4)
+val books : List<Book> = listOf(book1, book2, book3, book4)*/
 
 
 @Composable
-fun ItemBook(book: Book) {
+fun ItemBook(/*book: Book*/ book : GenBookItem) {
+    var authors : ArrayList<Author> = book.authors.toCollection(ArrayList())
+    var authorNames : ArrayList<String> = ArrayList()
+
+    for (s : Author in authors) {
+        authorNames.add(s.name)
+    }
+
+    val displayBook = Book(book.isbn, book.title, book.publisher.name, book.classification.name, authorNames)
+
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -63,15 +77,20 @@ fun ItemBook(book: Book) {
         Column {
             Text("Titulo: " + book.title,
                 style = MaterialTheme.typography.bodyLarge)
-            Text(text = if (book.status) {
+
+            /*Text(text = if (book.status) {
                 "DISPONIBLE"
             } else {
                 "NO DISPONIBLE"
             },
-                style = MaterialTheme.typography.bodyLarge)
+                style = MaterialTheme.typography.bodyLarge)*/
+
             Spacer(modifier = Modifier
                 .height(16.dp)
                 .fillMaxWidth())
+
+            Text("ISBN: " + book.isbn,
+                style = MaterialTheme.typography.bodyLarge)
         }
 
     }
@@ -79,26 +98,31 @@ fun ItemBook(book: Book) {
 }
 
 @Composable
-fun ShowBooks(list : List<Book>) {
+fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState) {
 
-    LazyColumn (
-        verticalArrangement = Arrangement.Center,
-        contentPadding = PaddingValues(vertical = 32.dp, horizontal = 12.dp)
-            ){
-        item {
-            Text(text = "CATÁLOGO DE LIBROS",
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth())
-        }
-        item {
-            Icon(painter = painterResource(id = R.drawable.ic_books_bigger),
-                contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-            )
-        }
-        items(list.size) {
-            index -> ItemBook(book = list.get(index))
+    if(!state.listLibro.isEmpty()) {
+        LazyColumn(
+            verticalArrangement = Arrangement.Center,
+            contentPadding = PaddingValues(vertical = 32.dp, horizontal = 12.dp)
+        ) {
+            item {
+                Text(
+                    text = "CATÁLOGO DE LIBROS",
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_books_bigger),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            items(/*list.size*/state.listLibro.size) { index ->
+                ItemBook(state.listLibro.get(index))
+            }
         }
     }
 }
@@ -124,15 +148,18 @@ fun SearchBar() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun CatalogScreen() {
+//@Preview
+fun CatalogScreen(navController : NavHostController) {
+    val bookViewModel : BookViewModel = viewModel()
+    val state by bookViewModel.bookoState.collectAsState()
+
     Column {
         SearchBar()
         FilterRadio()
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(24.dp))
-        ShowBooks(list = books)
+        ShowBooks(state)
     }
 }
 /*

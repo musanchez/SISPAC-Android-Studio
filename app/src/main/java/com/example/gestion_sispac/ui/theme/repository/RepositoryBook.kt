@@ -12,6 +12,8 @@ class RepositoryBook {
     suspend fun getAll(): List<GenBookItem> {
         try {
             val bookList = apiBook.getAll()
+            if (!bookList.isEmpty())
+                println("not empty")
             return bookList
         } catch (e: Exception) {
             Log.d("Error", e.message.toString())

@@ -3,7 +3,9 @@ package com.example.gestion_sispac.ui.theme.screen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -46,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.gestion_sispac.ui.theme.model.Author
 import com.example.gestion_sispac.ui.theme.model.GenBookItem
+import com.example.gestion_sispac.ui.theme.navigation.Destinations
 import com.example.gestion_sispac.ui.theme.viewmodel.BookViewModel
 import com.example.gestion_sispac.ui.theme.viewmodel.LoginModel
 
@@ -144,7 +148,8 @@ fun ItemBook(book : GenBookItem) {
 }
 
 @Composable
-fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState) {
+fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState, navController: NavHostController) {
+    var isIconClicked by remember { mutableStateOf(false) }
 
     if(!state.listLibro.isEmpty()) {
         LazyColumn(
@@ -164,11 +169,43 @@ fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState) {
                     .fillMaxWidth())
             }
             item {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_books_bigger),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_return_arrow),
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                            .clickable {
+                                isIconClicked = !isIconClicked
+                                if (isIconClicked)
+                                    navController.navigate(Destinations.OptionScreen.route)
+                            }
+                    )
+
+                    Spacer(modifier = Modifier
+                        .weight(0.5f)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_books_bigger),
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+
+                    Spacer(modifier = Modifier
+                        .weight(0.5f)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_go_arrow),
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
 
                 Spacer(modifier = Modifier
                     .height(4.dp)
@@ -213,7 +250,7 @@ fun CatalogScreen(navController : NavHostController) {
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(24.dp))
-        ShowBooks(state)
+        ShowBooks(state, navController)
     }
 }
 /*

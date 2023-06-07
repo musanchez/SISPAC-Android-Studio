@@ -11,7 +11,7 @@ import com.example.gestion_sispac.ui.theme.screen.OptionScreen
 @Composable
 fun NavigationHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Destinations.LoginScreen.route) {
+    NavHost(navController = navController, startDestination = Destinations.OptionScreen.route) {
         composable(Destinations.LoginScreen.route) {
             FormLogin(navController = navController)
         }

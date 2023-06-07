@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -41,13 +43,31 @@ fun IconTitle(title: String, goToOption : () -> Unit) {
         Log.d(",MENSAJE", "CLICK EN OPCION")}) {
             //Icon(painter = icon, contentDescription = null, modifier = Modifier.clickable { goToOption
                 //Log.d(",MENSAJE", "CLICK EN OPCION") })
-            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Text(text = title, style = MaterialTheme.typography.bodyLarge, fontSize = 14.sp)
             //Spacer(modifier = Modifier.size(10.dp))
     }
 }
 
 @Composable
+fun ProfileIconTitle(goToOption : () -> Unit) {
+    Button (onClick = {goToOption() }) {
+        Icon(painter = painterResource(R.drawable.ic_profile),
+            contentDescription = null,
+            //add clickable
+        )
+    }
+}
+
+@Composable
 fun OptionScreen(navController: NavHostController) {
+    /*Row(verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ProfileIconTitle() {
+
+        }
+    }*/
     Column(horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.SpaceEvenly,
     modifier = Modifier.fillMaxSize()){
@@ -56,17 +76,18 @@ fun OptionScreen(navController: NavHostController) {
         Text("¿Qué deseas hacer?")
         Spacer(modifier = Modifier.height(24.dp))
         Row (
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ){
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(10.dp))
             IconTitle(title = "Catálogo") {
                 navController.navigate(Destinations.CatalogScreen.route)
             }
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(10.dp))
             IconTitle(title = "Préstamos") {
 
             }
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(10.dp))
             IconTitle(title = "Ajustes") {
 
             }

@@ -116,7 +116,9 @@ fun FormLogin(navController: NavHostController) {
     if (isSuccess.value) {
         //Log.d("BIENVENIDO","Bienvenido $loginModel.cif")
         //show = true
-        navController.navigate(route = Destinations.OptionScreen.route)
+        LaunchedEffect(Unit) {
+            navController.navigate(route = Destinations.OptionScreen.route)
+        }
     }
     Column(
         modifier = Modifier.fillMaxSize(),

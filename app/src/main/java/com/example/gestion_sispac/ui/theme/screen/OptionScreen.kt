@@ -37,7 +37,7 @@ import com.example.gestion_sispac.ui.theme.navigation.Destinations
 //@Preview
 @Composable
 fun IconTitle(title: String, goToOption : () -> Unit) {
-    Button (onClick = {//goToOption()
+    Button (onClick = {goToOption()
         Log.d(",MENSAJE", "CLICK EN OPCION")}) {
             //Icon(painter = icon, contentDescription = null, modifier = Modifier.clickable { goToOption
                 //Log.d(",MENSAJE", "CLICK EN OPCION") })

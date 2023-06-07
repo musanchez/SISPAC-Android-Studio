@@ -148,7 +148,7 @@ fun ItemBook(book : GenBookItem) {
 }
 
 @Composable
-fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState, navController: NavHostController) {
+fun ShowBooks(state : BookViewModel.UIState, navController: NavHostController) {
     var isIconClicked by remember { mutableStateOf(false) }
 
     if(!state.listLibro.isEmpty()) {
@@ -175,7 +175,7 @@ fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState, navController
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
+                    Icon(   //RETURN ARROW
                         painter = painterResource(id = R.drawable.ic_return_arrow),
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.CenterVertically)
@@ -194,6 +194,12 @@ fun ShowBooks(/*list : List<Book>*/ state : BookViewModel.UIState, navController
                         painter = painterResource(id = R.drawable.ic_books_bigger),
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.CenterVertically)
+                            .clickable {
+                                isIconClicked = !isIconClicked
+                                if (isIconClicked)
+                                    //navController.navigate(Destinations.OptionScreen.route)
+                                    Log.d("...", "...")
+                            }
                     )
 
                     Spacer(modifier = Modifier

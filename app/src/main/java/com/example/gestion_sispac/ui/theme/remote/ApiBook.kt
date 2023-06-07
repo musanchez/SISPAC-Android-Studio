@@ -8,7 +8,7 @@ interface ApiBook {
     @GET("/api/Book/all")
     suspend fun getAll(): GenBook
 
-    @GET("/api/Book/one/bytitle/{isbn}")
+    @GET("/api/Book/one/bytitle/{title}")
     suspend fun getOneByTitle(title: String): GenBookItem
 
     @GET("/api/Book/many/bypublisher/{publisherName}")

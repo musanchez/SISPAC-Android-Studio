@@ -5,7 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.gestion_sispac.ui.theme.model.GenBookItem
 import com.example.gestion_sispac.ui.theme.repository.RepositoryBook
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,7 +22,34 @@ class BookViewModel : ViewModel() {
     val bookRepo : RepositoryBook = RepositoryBook()
 
     private val _bookState = MutableStateFlow<UIState>(UIState())
-    val bookoState: StateFlow<UIState> = _bookState
+    val bookState: StateFlow<UIState> = _bookState
+
+    //nuevo
+    private val _searchText = MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
+
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
+
+    private val _books = MutableStateFlow(listOf<GenBookItem>())
+    val books = searchText.combine(_books) {
+        text, books ->
+        if (text.isBlank())
+            books
+        else {
+            /*books.filter {
+                it.doesMatchSearchQuery(text)
+            }*/
+        }
+    }
+    .stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000),
+        _books.value
+    )
+
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+    }
 
     init {
         viewModelScope.launch {

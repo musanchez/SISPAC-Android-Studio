@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.gestion_sispac.ui.theme.navigation.NavigationHost
-import com.example.gestion_sispac.ui.theme.screen.CatalogScreen
-import com.example.gestion_sispac.ui.theme.screen.DateSelection
+import com.example.gestion_sispac.ui.theme.screen.LoanCreate
 import com.example.gestion_sispac.ui.theme.viewmodel.LoginModel
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                    // NavigationHost()
                     //SelectDatesScreen(cart = emptyList())
-                    DateSelection()
+                    LoanCreate()
                 }
             }
         }

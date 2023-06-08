@@ -33,7 +33,7 @@ import com.example.gestion_sispac.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateSelection() {
+fun LoanCreate() {
     var beginLoan: String by rememberSaveable{ mutableStateOf("") }
     var endLoan: String by rememberSaveable { mutableStateOf("") }
     val yearDl: Int

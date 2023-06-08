@@ -1,6 +1,7 @@
 package com.example.gestion_sispac.ui.theme.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +15,7 @@ import com.example.gestion_sispac.ui.theme.viewmodel.LoanViewModel
 @Composable
 fun NavigationHost() {
     val navController = rememberNavController()
+    
     NavHost(navController = navController, startDestination = Destinations.LoginScreen.route) {
         composable(Destinations.LoginScreen.route) {
             FormLogin(navController = navController)

@@ -71,6 +71,7 @@ var cart = mutableListOf<GenBookItem>()
 
 @Composable
 fun ItemBook(book : GenBookItem) {
+    var textDef by remember { mutableStateOf("Agregar al carrito") }
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -134,10 +135,12 @@ fun ItemBook(book : GenBookItem) {
                 .fillMaxWidth())
 
             Button(onClick = {
-                if (!(book  in cart)) {
+                if (!(book  in cart) && (cart.size < 3)){
                     cart.add(book)
+                    textDef = "Quitar del carrito"
                 } else {
                     cart.remove(book)
+                    textDef = "Agregar al carrito"
                 }
                              },
                 modifier = Modifier.padding(16.dp),
@@ -145,7 +148,7 @@ fun ItemBook(book : GenBookItem) {
                     containerColor = Color.LightGray/*,
                     contentColor = Color.Red*/)
             ) {
-                Text("Agregar al Carrito", style = MaterialTheme.typography.bodyLarge)
+                Text(text = textDef, style = MaterialTheme.typography.bodyLarge)
             }
 
             Spacer(modifier = Modifier

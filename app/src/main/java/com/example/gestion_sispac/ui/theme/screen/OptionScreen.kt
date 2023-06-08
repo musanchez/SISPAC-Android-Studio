@@ -99,6 +99,7 @@ fun OptionScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.size(20.dp))
             IconTitle(title = "Préstamos") {
+                navController.navigate(Destinations.LoanScreen.route)
 
             }
             Spacer(modifier = Modifier.size(20.dp))

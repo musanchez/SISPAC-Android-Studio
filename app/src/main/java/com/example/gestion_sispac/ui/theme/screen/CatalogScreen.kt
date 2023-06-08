@@ -136,6 +136,8 @@ fun ItemBook(book : GenBookItem) {
             Button(onClick = {
                 if (!(book  in cart)) {
                     cart.add(book)
+                } else {
+                    cart.remove(book)
                 }
                              },
                 modifier = Modifier.padding(16.dp),

@@ -10,7 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.gestion_sispac.ui.theme.navigation.NavigationHost
 import com.example.gestion_sispac.ui.theme.screen.CatalogScreen
-import com.example.gestion_sispac.ui.theme.screen.OptionScreen
+import com.example.gestion_sispac.ui.theme.screen.DateSelection
 import com.example.gestion_sispac.ui.theme.viewmodel.LoginModel
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost()
+                   // NavigationHost()
+                    //SelectDatesScreen(cart = emptyList())
+                    DateSelection()
                 }
             }
         }

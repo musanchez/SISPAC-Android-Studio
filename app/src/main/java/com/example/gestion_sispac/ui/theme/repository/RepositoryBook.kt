@@ -5,6 +5,8 @@ import com.example.gestion_sispac.ui.theme.model.GenBook
 import com.example.gestion_sispac.ui.theme.model.GenBookItem
 import com.example.gestion_sispac.ui.theme.remote.ApiAdapter
 import com.example.gestion_sispac.ui.theme.remote.ApiBook
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 
 class RepositoryBook {
     private val apiBook : ApiBook = ApiAdapter.getInstance().create(ApiBook::class.java)

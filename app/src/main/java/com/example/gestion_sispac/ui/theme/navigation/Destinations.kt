@@ -7,4 +7,6 @@ sealed class Destinations(
     object CatalogScreen: Destinations("catalog")
     object OptionScreen: Destinations("options")
     object LoginScreen: Destinations("login")
+
+    object LoanScreen: Destinations("loans")
 }

@@ -1,6 +1,7 @@
 package com.example.gestion_sispac.ui.theme.repository
 
 import android.util.Log
+import com.example.gestion_sispac.ui.theme.dto.LoanDto
 import com.example.gestion_sispac.ui.theme.model.Loan
 import com.example.gestion_sispac.ui.theme.model.LoanItem
 import com.example.gestion_sispac.ui.theme.remote.ApiAdapter
@@ -23,5 +24,13 @@ class RepositoryLoan {
         }
         return emptyList<LoanItem>()
 
+    }
+
+    suspend fun loanCreate(loan: LoanDto) {
+        try {
+            apiLoan.loanCreate(loan)
+        } catch (e : Exception) {
+            Log.d("Exception", e.message.toString())
+        }
     }
 }

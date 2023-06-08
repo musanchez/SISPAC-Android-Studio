@@ -67,6 +67,8 @@ val books : List<Book> = listOf(book1, book2, book3, book4)*/
 //si ningún radio button está seleccionado
 var filter : String = "Título"
 
+var cart = mutableListOf<GenBookItem>()
+
 @Composable
 fun ItemBook(book : GenBookItem) {
     Box (
@@ -131,7 +133,11 @@ fun ItemBook(book : GenBookItem) {
                 .height(2.dp)
                 .fillMaxWidth())
 
-            Button(onClick = {},
+            Button(onClick = {
+                if (!(book  in cart)) {
+                    cart.add(book)
+                }
+                             },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.LightGray/*,
@@ -153,79 +159,79 @@ fun ItemBook(book : GenBookItem) {
 fun ShowBooks(state : BookViewModel.UIState, navController: NavHostController) {
     var isIconClicked by remember { mutableStateOf(false) }
 
-    if(!state.listLibro.isEmpty()) {
-        LazyColumn(
-            verticalArrangement = Arrangement.Center,
-            contentPadding = PaddingValues(vertical = 32.dp, horizontal = 12.dp)
-        ) {
-            item {
-                Text(
-                    text = "CATÁLOGO DE LIBROS",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+                ){
+            Text(
+                text = "CATÁLOGO DE LIBROS",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(   //RETURN ARROW
+                    painter = painterResource(id = R.drawable.ic_return_arrow),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .clickable {
+                            isIconClicked = !isIconClicked
+                            if (isIconClicked)
+                                navController.navigate(Destinations.OptionScreen.route)
+                        }
                 )
 
                 Spacer(modifier = Modifier
-                    .height(4.dp)
-                    .fillMaxWidth())
-            }
-            item {
+                    .weight(0.5f)
+                )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(   //RETURN ARROW
-                        painter = painterResource(id = R.drawable.ic_return_arrow),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .clickable {
-                                isIconClicked = !isIconClicked
-                                if (isIconClicked)
-                                    navController.navigate(Destinations.OptionScreen.route)
-                            }
-                    )
-
-                    Spacer(modifier = Modifier
-                        .weight(0.5f)
-                    )
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_books_bigger),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .clickable {
-                                isIconClicked = !isIconClicked
-                                if (isIconClicked)
-                                //navController.navigate(Destinations.OptionScreen.route)
-                                    Log.d("...", "...")
-                            }
-                    )
-
-                    Spacer(modifier = Modifier
-                        .weight(0.5f)
-                    )
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_go_arrow),
-                        contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_books_bigger),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .clickable {
+                            isIconClicked = !isIconClicked
+                            if (isIconClicked)
+                            //navController.navigate(Destinations.OptionScreen.route)
+                                Log.d("...", "...")
+                        }
+                )
 
                 Spacer(modifier = Modifier
-                    .height(4.dp)
-                    .fillMaxWidth())
+                    .weight(0.5f)
+                )
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_go_arrow),
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.CenterVertically).clickable {
+
+                    }
+                )
             }
-            items(/*list.size*/state.listLibro.size) { index ->
-                ItemBook(state.listLibro.get(index))
+            Spacer(modifier = Modifier
+                .height(4.dp)
+                .fillMaxWidth())
+            if(!state.listLibro.isEmpty()) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.Center,
+                    contentPadding = PaddingValues(vertical = 32.dp, horizontal = 12.dp)
+                ) {
+                    items(/*list.size*/state.listLibro.size) { index ->
+                        ItemBook(state.listLibro.get(index))
+                    }
+                }
             }
+
         }
-    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

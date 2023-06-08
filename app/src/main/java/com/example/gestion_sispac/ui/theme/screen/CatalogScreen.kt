@@ -12,20 +12,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Icon
 import com.example.gestion_sispac.R
@@ -51,8 +52,6 @@ import com.example.gestion_sispac.ui.theme.model.Author
 import com.example.gestion_sispac.ui.theme.model.GenBookItem
 import com.example.gestion_sispac.ui.theme.navigation.Destinations
 import com.example.gestion_sispac.ui.theme.viewmodel.BookViewModel
-import com.example.gestion_sispac.ui.theme.viewmodel.LoginModel
-
 
 /*val book1 = Book(title = "El principito", isbn = "1",
     classification = "Fantasía", publisher = "Springer", status = true)
@@ -65,6 +64,8 @@ val book4 = Book(title = "Margarita", isbn = "1",
 
 val books : List<Book> = listOf(book1, book2, book3, book4)*/
 
+//si ningún radio button está seleccionado
+var filter : String = "Título"
 
 @Composable
 fun ItemBook(book : GenBookItem) {
@@ -95,7 +96,8 @@ fun ItemBook(book : GenBookItem) {
 
             //publisher info
             Text(" Editorial: " + book.publisher.name,
-                style = MaterialTheme.typography.bodyLarge)
+                style = MaterialTheme.typography.bodyLarge
+            )
 
             Spacer(modifier = Modifier
                 .height(8.dp)
@@ -178,7 +180,8 @@ fun ShowBooks(state : BookViewModel.UIState, navController: NavHostController) {
                     Icon(   //RETURN ARROW
                         painter = painterResource(id = R.drawable.ic_return_arrow),
                         contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
                             .clickable {
                                 isIconClicked = !isIconClicked
                                 if (isIconClicked)
@@ -193,11 +196,12 @@ fun ShowBooks(state : BookViewModel.UIState, navController: NavHostController) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_books_bigger),
                         contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
                             .clickable {
                                 isIconClicked = !isIconClicked
                                 if (isIconClicked)
-                                    //navController.navigate(Destinations.OptionScreen.route)
+                                //navController.navigate(Destinations.OptionScreen.route)
                                     Log.d("...", "...")
                             }
                     )
@@ -223,14 +227,26 @@ fun ShowBooks(state : BookViewModel.UIState, navController: NavHostController) {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun SearchBar() {
-    var search by remember { mutableStateOf(value = "") }
-    OutlinedTextField(value = search,
-        onValueChange = {search = it},
-        trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_search),
+fun SearchBar(viewModel: BookViewModel) {
+    //var search by remember { mutableStateOf(value = "") }
+    val searchText by viewModel.searchText.collectAsState()
+
+    OutlinedTextField(
+        value = searchText,
+        onValueChange = { searchText ->
+            when (filter) {
+                "Título" -> viewModel.onTitleSearchChange(searchText)
+                "Autor" -> viewModel.onAuthorSearchChange(searchText)
+                "Categoría" -> viewModel.onClassificationSearchChange(searchText)
+                "Editorial" -> viewModel.onPublisherSearchChange(searchText)
+            }
+            Log.d("xd", filter)
+        }
+
+        ,trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_search),
             contentDescription = null)},
         label = {Text(text = "Buscar",
         style = MaterialTheme.typography.bodyLarge)},
@@ -238,9 +254,7 @@ fun SearchBar() {
         modifier = Modifier.
         fillMaxWidth()
     )
-
 }
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -250,15 +264,29 @@ fun CatalogScreen(navController : NavHostController) {
     val bookViewModel : BookViewModel = viewModel()
     val state by bookViewModel.bookState.collectAsState()
 
+    //nuevo
+    val viewModel = viewModel<BookViewModel>()
+    val isSearching by viewModel.isSearching.collectAsState()
+
     Column {
-        SearchBar()
+        SearchBar(bookViewModel)
+
         FilterRadio()
+
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(24.dp))
-        ShowBooks(state, navController)
+
+        if(isSearching) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        } else {
+            ShowBooks(state, navController)
+        }
     }
 }
+
 /*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -272,26 +300,35 @@ fun OptionsBar() {
 @Composable
 fun FilterRadio() {
     var option by remember {mutableStateOf("")}
+
     Row (
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
             ){
 
-        RadioButton(selected = option == "Autor", onClick = { option = "Autor"
-        /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
-        Text(text = "Autor", style = MaterialTheme.typography.labelSmall)
+        RadioButton(selected = option == "Título", onClick = {
+            option = "Título"
+            filter = "Título"}
+        )
+        Text(text = "Titulo", style = MaterialTheme.typography.labelSmall)
 
-        RadioButton(selected = option == "Editorial", onClick = { option = "Editorial"
-            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        RadioButton(selected = option == "Editorial", onClick = {
+            option = "Editorial"
+            filter = "Editorial"}
+        )
         Text(text = "Editorial", style = MaterialTheme.typography.labelSmall)
 
-        RadioButton(selected = option == "Categoría", onClick = { option = "Categoría"
-            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
+        RadioButton(selected = option == "Categoría", onClick = {
+            option = "Categoría"
+            filter = "Categoría"}
+        )
         Text(text = "Categoría", style = MaterialTheme.typography.labelSmall)
 
-        RadioButton(selected = option == "Titulo", onClick = { option = "Titulo"
-            /*DEJAR ESPACIO PARA FUNCION COMPOSABLE CON LA LOGICA*/})
-        Text(text = "Titulo", style = MaterialTheme.typography.labelSmall)
+        RadioButton(selected = option == "Autor", onClick = {
+            option = "Autor"
+            filter = "Autor"}
+        )
+        Text(text = "Autor", style = MaterialTheme.typography.labelSmall)
     }
 }
